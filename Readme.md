@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Nick Braun](https://up.htmlacademy.ru/javascript/23/user/1678643).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгений Карпов](https://htmlacademy.ru/profile/id70583).
 
 ---
 
