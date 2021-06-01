@@ -1,32 +1,27 @@
 /* eslint-disable no-console */
 /* eslint-disable prefer-template */
 const getRandomIntNumber = function (min, max) {
-  while (min >= 0 && max > 0) {
-    const result = Math.floor(Math.random() * (max - min + 1)) + min;
+  if (min >= 0 && max > 0) {
     if (min < max) {
+      const result = Math.floor(Math.random() * (max - min + 1)) + min;
       console.log('случайное целое число из диапазона ' + result);
-      return result;
-    } else {
-      console.log('диапазон задан неверно');
       return result;
     }
   }
-  console.log('диапазон должен быть положительным');
+  return console.log('диапазон задан неверно');
 };
-getRandomIntNumber(2, 6);
+getRandomIntNumber(0, 6);
 
 
 const getRandomFracNumber = function (min, max, fraction) {
-  const result = Math.random() * (max - min + 1) + min;
-  while (min >= 0 && max > 0) {
+  if (min >= 0 && max > 0) {
     if (min < max) {
-      console.log('случайное дробное число из диапазона с ' + fraction + ' цифрами после запятой ' + result.toFixed(fraction));
-      return result;
-    } else {
-      console.log('диапазон задан неверно');
+      let result = Math.random() * (max - min + 1) + min;
+      result = result.toFixed(fraction);
+      console.log('случайное дробное число из диапазона с ' + fraction + ' цифрами после запятой ' + result);
       return result;
     }
   }
-  console.log('диапазон должен быть положительным');
+  return console.log('диапазон задан неверно');
 };
-getRandomFracNumber(3.115, 5.457, 3);
+getRandomFracNumber(1.115, 3.457, 2);
