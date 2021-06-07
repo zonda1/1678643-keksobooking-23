@@ -14,7 +14,7 @@ const getRandomFracNumber = function (min, max, fraction) {
     if (min < max) {
       let result = Math.random() * (max - min + 1) + min;
       result = result.toFixed(fraction);
-      return result;
+      return +result;
     }
   }
   return false;

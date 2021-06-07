@@ -2,16 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable prefer-template */
 
-const OFFERS_QUANTITY=10;
-
-const AUTHOR = {
-  avatar: 'img/avatars/user01.png',
-};
-
-const LOCATION = {
-  lat: +getRandomFracNumber(35.65000, 35.70000, 5),
-  lng: +getRandomFracNumber(139.70000, 139.80000, 5),
-};
+const OFFERS_QUANTITY = 10;
 
 const TITLE = 'Хорошие апартаменты';
 const ADDRESS = 'location.4, location.3';
@@ -68,9 +59,14 @@ const createOfferObject = () => {
 };
 
 const createObject = () => ({
-  author: AUTHOR,
+  author: {
+    avatar: 'img/avatars/user0-1.png'.replace('-1', getRandomIntNumber(1, 8)),
+  },
   offer: createOfferObject(),
-  location: LOCATION,
+  location: {
+    lat: getRandomFracNumber(35.65000, 35.70000, 5),
+    lng: getRandomFracNumber(139.70000, 139.80000, 5),
+  },
 });
 
 const offersNearby = new Array(OFFERS_QUANTITY).fill(null).map(() => createObject());
