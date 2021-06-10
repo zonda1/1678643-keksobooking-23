@@ -22,4 +22,5 @@ const getRandomFracNumber = function (min, max, fraction) {
 getRandomFracNumber();
 
 const getRandomElement = (elements) => elements[getRandomIntNumber(0, elements.length - 1)];
-getRandomElement();
+
+export {getRandomIntNumber,getRandomFracNumber,getRandomElement};
