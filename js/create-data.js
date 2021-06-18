@@ -13,6 +13,15 @@ const TYPE = [
   'hotel',
 ];
 
+const typeCaption = function() {
+  TYPE[0]='Дворец';
+  TYPE[1]='Квартира';
+  TYPE[2]='Дом';
+  TYPE[3]='Бунгало';
+  TYPE[4]='Отель';
+  return TYPE;
+};
+
 const CHECKIN = [
   '12:00',
   '13:00',
@@ -34,6 +43,8 @@ const FEATURES = [
   'conditioner',
 ];
 
+const OFFERS_QUANTITY = 1;
+
 
 const createOfferObject = () => {
   const randomPhotosLength = getRandomIntNumber(0, PHOTOS.length - 1);
@@ -44,7 +55,7 @@ const createOfferObject = () => {
     title: TITLE,
     address: ADDRESS,
     price: getRandomIntNumber(20000, 50000),
-    type: getRandomElement(TYPE),
+    type: getRandomElement(typeCaption()),
     rooms: getRandomIntNumber(1, 7),
     guests: getRandomIntNumber(1, 5),
     checkin: getRandomElement(CHECKIN),
@@ -66,4 +77,6 @@ const createObject = () => ({
   },
 });
 
-export {createObject};
+const offersNearby =() => new Array(OFFERS_QUANTITY).fill(null).map(() => createObject());
+console.log(offersNearby());
+export {offersNearby};
