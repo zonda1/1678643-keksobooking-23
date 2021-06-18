@@ -1,5 +1,5 @@
 /* eslint-disable prefer-template */
-import {offersNearby} from './create-data.js';
+import {typeCaption,offersNearby} from './create-data.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const mapCanvas = document.querySelector('.map__canvas');
@@ -9,7 +9,7 @@ offersList.forEach(({offer,author}) => {
   offerElement.querySelector('.popup__title').textContent=offer.title;
   offerElement.querySelector('.popup__text--address').textContent=offer.address;
   offerElement.querySelector('.popup__text--price').textContent=offer.price + ' ₽/ночь';
-  offerElement.querySelector('.popup__type').textContent=offer.type;
+  offerElement.querySelector('.popup__type').textContent=typeCaption[offer.type];
   offerElement.querySelector('.popup__text--capacity').textContent=offer.rooms + ' комнат для ' + offer.guests + ' гостей';
   offerElement.querySelector('.popup__text--time').textContent='Заезд после ' + offer.checkin + ', выезд до ' + offer.checkout;
   offerElement.querySelector('.popup__features').innerHTML=offer.features;
