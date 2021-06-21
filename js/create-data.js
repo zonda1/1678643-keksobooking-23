@@ -13,6 +13,14 @@ const TYPE = [
   'hotel',
 ];
 
+const typeCaption={
+  'palace':'Дворец',
+  'flat':'Квартира',
+  'house':'Дом',
+  'bungalow':'Бунгало',
+  'hotel':'Отель',
+};
+
 const CHECKIN = [
   '12:00',
   '13:00',
@@ -33,6 +41,8 @@ const FEATURES = [
   'elevator',
   'conditioner',
 ];
+
+const OFFERS_QUANTITY = 1;
 
 
 const createOfferObject = () => {
@@ -66,4 +76,8 @@ const createObject = () => ({
   },
 });
 
-export {createObject};
+const offersNearby =() => new Array(OFFERS_QUANTITY).fill(null).map(() => createObject());
+console.log(offersNearby());
+export {typeCaption,offersNearby};
+
+
