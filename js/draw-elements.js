@@ -1,5 +1,7 @@
 /* eslint-disable prefer-template */
-import {typeCaption,offersNearby} from './create-data.js';
+import {typeCaption} from './create-data.js';
+import {offersNearby} from './main.js';
+// import'./main.js';
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 const mapCanvas = document.querySelector('.map__canvas');
@@ -19,4 +21,5 @@ offersList.forEach(({offer,author}) => {
   mapCanvas.appendChild(offerElement);
 });
 
-export{offersList};
+
+// export{offersList};

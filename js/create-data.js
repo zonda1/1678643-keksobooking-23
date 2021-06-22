@@ -42,7 +42,7 @@ const FEATURES = [
   'conditioner',
 ];
 
-const OFFERS_QUANTITY = 1;
+// const OFFERS_QUANTITY = 1;
 
 
 const createOfferObject = () => {
@@ -75,9 +75,9 @@ const createObject = () => ({
     lng: getRandomFracNumber(139.70000, 139.80000, 5),
   },
 });
-
-const offersNearby =() => new Array(OFFERS_QUANTITY).fill(null).map(() => createObject());
-console.log(offersNearby());
-export {typeCaption,offersNearby};
+createObject();
+// const offersNearby =() => new Array(OFFERS_QUANTITY).fill(null).map(() => createObject());
+// console.log(offersNearby());
+export {typeCaption,createObject};
 
 
