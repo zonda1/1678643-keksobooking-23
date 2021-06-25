@@ -1,5 +1,5 @@
 /* eslint-disable id-length */
-import {getWordSuffix} from './draw-elements.js';
+import {getDeclension} from './utils.js';
 
 const SYMBOLS_DICT={
   one: 'символ',
@@ -25,7 +25,7 @@ formTitleInput.addEventListener('input', () => {
   const valueLength = formTitleInput.value.length;
   if (valueLength < MIN_TITLE_LENGTH) {
     const symbolsRemain=MIN_TITLE_LENGTH-valueLength;
-    formTitleInput.setCustomValidity(`Нужно ввести еще ${symbolsRemain} ${getWordSuffix(symbolsRemain,SYMBOLS_DICT)}`);
+    formTitleInput.setCustomValidity(`Нужно ввести еще ${symbolsRemain} ${getDeclension(symbolsRemain,SYMBOLS_DICT)}`);
   } else if (valueLength > MAX_TITLE_LENGTH) {
     formTitleInput.setCustomValidity('Имя не должно превышать 100-а символов');
   } else {

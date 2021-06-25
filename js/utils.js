@@ -1,3 +1,4 @@
+
 const getRandomIntNumber = function (min, max) {
   if (min >= 0 && max > 0) {
     if (min < max) {
@@ -23,4 +24,16 @@ getRandomFracNumber();
 
 const getRandomElement = (elements) => elements[getRandomIntNumber(0, elements.length - 1)];
 
-export {getRandomIntNumber,getRandomFracNumber,getRandomElement};
+const getDeclension = function (num,obj) {
+
+  if (num % 10===1 && num % 100!==11) {
+    return obj.one;
+  }
+  if (num % 10>=2 && num % 10 <= 4) {
+    return obj.several;
+  }
+  return obj.many;
+};
+
+
+export {getRandomIntNumber,getRandomFracNumber,getRandomElement,getDeclension};
