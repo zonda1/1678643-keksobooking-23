@@ -1,3 +1,4 @@
+/* eslint-disable id-length */
 import {getWordSuffix} from './draw-elements.js';
 
 const SYMBOLS_DICT={
