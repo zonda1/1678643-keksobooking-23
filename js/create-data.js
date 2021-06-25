@@ -72,12 +72,7 @@ const createObject = () => ({
     lng: getRandomFracNumber(139.70000, 139.80000, 5),
   },
 });
-// const objectfolder=createOfferObject();
-createObject();
-console.log(createOfferObject());
 
-console.log(createObject());
-console.log(offer.rooms);
 export {typeCaption,createObject};
 
 

@@ -1,3 +1,11 @@
+import {getWordSuffix} from './draw-elements.js';
+
+const SYMBOLS_DICT={
+  one: 'символ',
+  several:'символа',
+  many:'символов',
+};
+
 const formTitleInput = document.querySelector('input[id="title"]');
 const formPriceInput = document.querySelector('input[id="price"]');
 const formRoomsSelect = document.querySelector('select[id="room_number"]');
@@ -15,7 +23,8 @@ const MAX_PRICE_VALUE = 1000000;
 formTitleInput.addEventListener('input', () => {
   const valueLength = formTitleInput.value.length;
   if (valueLength < MIN_TITLE_LENGTH) {
-    formTitleInput.setCustomValidity(`Нужно ввести еще ${MIN_TITLE_LENGTH-valueLength} символов`);
+    const symbolsRemain=MIN_TITLE_LENGTH-valueLength;
+    formTitleInput.setCustomValidity(`Нужно ввести еще ${symbolsRemain} ${getWordSuffix(symbolsRemain,SYMBOLS_DICT)}`);
   } else if (valueLength > MAX_TITLE_LENGTH) {
     formTitleInput.setCustomValidity('Имя не должно превышать 100-а символов');
   } else {
@@ -27,9 +36,12 @@ formTitleInput.addEventListener('input', () => {
 formPriceInput.addEventListener('input', () => {
   if (formPriceInput.value > MAX_PRICE_VALUE) {
     formPriceInput.setCustomValidity('Значение не должно превышать 1000000');
+  } else if (formPriceInput.value < 0) {
+    formPriceInput.setCustomValidity('Значение не должно быть отрицательным');
   } else {
     formPriceInput.setCustomValidity('');
   }
+  formPriceInput.reportValidity();
 });
 
 const disabledReset=()=> {
