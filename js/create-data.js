@@ -42,9 +42,6 @@ const FEATURES = [
   'conditioner',
 ];
 
-const OFFERS_QUANTITY = 1;
-
-
 const createOfferObject = () => {
   const randomPhotosLength = getRandomIntNumber(0, PHOTOS.length - 1);
   const newPhotosArray = PHOTOS.slice(0, randomPhotosLength + 1);
@@ -76,8 +73,6 @@ const createObject = () => ({
   },
 });
 
-const offersNearby =() => new Array(OFFERS_QUANTITY).fill(null).map(() => createObject());
-console.log(offersNearby());
-export {typeCaption,offersNearby};
+export {typeCaption,createObject};
 
 
