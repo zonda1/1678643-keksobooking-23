@@ -1,5 +1,4 @@
-/* eslint-disable id-length */
-import {getDeclension} from './utils.js';
+import {getDeclension,disabledReset} from './utils.js';
 
 const SYMBOLS_DICT={
   one: 'символ',
@@ -45,27 +44,22 @@ formPriceInput.addEventListener('input', () => {
   formPriceInput.reportValidity();
 });
 
-const disabledReset=()=> {
-  for (let i=0;i<formGuestsOptions.length;i++) {
-    formGuestsOptions[i].removeAttribute('disabled');
-  }
-};
 
 formRoomsSelect.addEventListener('change', () => {
   if (formRoomsSelect.value==='1') {
-    disabledReset();
+    disabledReset(formGuestsOptions);
     threeGuestsSelect.setAttribute('disabled', 'disabled');
     twoGuestsSelect.setAttribute('disabled', 'disabled');
     noGuestsSelect.setAttribute('disabled', 'disabled');
   } else if (formRoomsSelect.value==='2') {
-    disabledReset();
+    disabledReset(formGuestsOptions);
     threeGuestsSelect.setAttribute('disabled', 'disabled');
     noGuestsSelect.setAttribute('disabled', 'disabled');
   } else if (formRoomsSelect.value==='3') {
-    disabledReset();
+    disabledReset(formGuestsOptions);
     noGuestsSelect.setAttribute('disabled', 'disabled');
   } else if (formRoomsSelect.value==='100') {
-    disabledReset();
+    disabledReset(formGuestsOptions);
     threeGuestsSelect.setAttribute('disabled', 'disabled');
     twoGuestsSelect.setAttribute('disabled', 'disabled');
     oneGuestsSelect.setAttribute('disabled', 'disabled');

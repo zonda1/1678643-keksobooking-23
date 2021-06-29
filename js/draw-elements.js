@@ -40,4 +40,4 @@ const drawElements = function (container, elements) {
   });
 };
 
-export {drawElements};
+export {drawElements,getSingleElement};

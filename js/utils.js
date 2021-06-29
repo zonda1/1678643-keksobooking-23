@@ -1,3 +1,4 @@
+/* eslint-disable id-length */
 
 const getRandomIntNumber = function (min, max) {
   if (min >= 0 && max > 0) {
@@ -35,5 +36,11 @@ const getDeclension = function (num,obj) {
   return obj.many;
 };
 
+const disabledReset=(obj)=> {
+  for (let i=0;i<obj.length;i++) {
+    obj[i].removeAttribute('disabled');
+  }
+};
 
-export {getRandomIntNumber,getRandomFracNumber,getRandomElement,getDeclension};
+
+export {getRandomIntNumber,getRandomFracNumber,getRandomElement,getDeclension,disabledReset};
