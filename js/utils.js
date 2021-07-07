@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 /* eslint-disable id-length */
 const ALERT_SHOW_TIME = 5000;
 

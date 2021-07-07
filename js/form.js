@@ -21,6 +21,7 @@ const sendWithError=document.querySelector('#error').content.querySelector('.err
 const showError=sendWithError.cloneNode(true);
 const closeMessageWithError=showError.querySelector('.error__button');
 
+
 const formTitleInput = document.querySelector('input[id="title"]');
 const formPriceInput = document.querySelector('input[id="price"]');
 const formRoomsSelect = document.querySelector('select[id="room_number"]');
@@ -127,7 +128,8 @@ const onErrorModalEscKeydown = (evt) => {
 
 const showSuccessfulSubmition = () => {
   document.body.appendChild(showSuccess);
-  closeModal(showError);
+  openModal(showSuccess);
+  offerForm.reset();
   document.addEventListener('keydown',onSuccessModalEscKeydown);
   document.addEventListener('click',(evt) => {
     if (evt.target) {

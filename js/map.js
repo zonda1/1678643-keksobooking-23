@@ -4,6 +4,7 @@ import {getSingleElement} from './draw-elements.js';
 const mapFormFilters=document.querySelector('.map__filters');
 const mapFormFiltersSelect=mapFormFilters.children;
 const offerAddForm=document.querySelector('.ad-form');
+const buttonReset=offerAddForm.querySelector('.ad-form__reset');
 const offerAddFormElement=offerAddForm.querySelectorAll('.ad-form__element');
 const offerAddFormAddress=offerAddForm.querySelector('input[id="address"]');
 
@@ -67,5 +68,9 @@ const drawOnMap=(massive)=>{
       .bindPopup(getSingleElement({offer,author}));
   });
 };
+
+buttonReset.addEventListener('click', ()=>{
+  offerAddForm.reset();
+});
 
 export {drawOnMap};

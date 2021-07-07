@@ -35,8 +35,9 @@ const sendOffer=(onSuccess,onFail,body) => {
     .then((resolve) => {
       if (resolve.ok) {
         onSuccess();
+      } else {
+        onFail();
       }
-      onFail();
     })
     .catch(() =>
     {
