@@ -4,17 +4,17 @@ import {getSingleElement} from './draw-elements.js';
 const mapFormFilters=document.querySelector('.map__filters');
 const mapFormFiltersSelect=mapFormFilters.children;
 const offerAddForm=document.querySelector('.ad-form');
-const buttonReset=offerAddForm.querySelector('.ad-form__reset');
 const offerAddFormElement=offerAddForm.querySelectorAll('.ad-form__element');
-const offerAddFormAddress=offerAddForm.querySelector('input[id="address"]');
 
+const DEFAULT_MAIN_POSITION = {
+  lat:35.65283,
+  lng:139.83947,
+};
 
 const map=L.map('map-canvas')
-  .setView({
-    lat:35.65283,
-    lng:139.83947,
-  },
-  10);
+  .setView(
+    DEFAULT_MAIN_POSITION,
+    10);
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
@@ -24,7 +24,6 @@ L.tileLayer(
     resetDisabled(mapFormFiltersSelect);
     offerAddForm.classList.remove('ad-form--disabled');
     resetDisabled(offerAddFormElement);
-    offerAddFormAddress.value=L.latLng(35.65283, 139.83947);
   })
   .addTo(map);
 
@@ -35,20 +34,13 @@ const mainPinIcon = L.icon({
 });
 
 const marker=L.marker(
-  {
-    lat:35.65283,
-    lng:139.83947,
-  },
+  DEFAULT_MAIN_POSITION,
   {
     draggable:true,
     icon:mainPinIcon,
   },
 ).addTo(map);
 
-
-marker.on('moveend',(evt)=>{
-  offerAddFormAddress.value=evt.target.getLatLng();
-});
 
 const drawOnMap=(massive)=>{
   massive.forEach(({location,offer,author}) => {
@@ -69,8 +61,4 @@ const drawOnMap=(massive)=>{
   });
 };
 
-buttonReset.addEventListener('click', ()=>{
-  offerAddForm.reset();
-});
-
-export {drawOnMap};
+export {drawOnMap,DEFAULT_MAIN_POSITION,marker};

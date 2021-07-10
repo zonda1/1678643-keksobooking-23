@@ -1,5 +1,6 @@
 import {getDeclension,resetDisabled,isEscEvent} from './utils.js';
 import {sendOffer} from './fetch.js';
+import {DEFAULT_MAIN_POSITION, marker} from './map.js';
 const SYMBOLS_DICT={
   one: 'символ',
   several:'символа',
@@ -13,7 +14,7 @@ const SYMBOLS_DICT={
 //   '100': [0],
 // };
 
-const offerForm= document.querySelector('.ad-form');
+const offerForm=document.querySelector('.ad-form');
 const sendWithSuccess=document.querySelector('#success').content.querySelector('.success');
 const showSuccess=sendWithSuccess.cloneNode(true);
 
@@ -21,6 +22,8 @@ const sendWithError=document.querySelector('#error').content.querySelector('.err
 const showError=sendWithError.cloneNode(true);
 const closeMessageWithError=showError.querySelector('.error__button');
 
+const formAddressInput=offerForm.querySelector('input[id="address"]');
+const resetButton=offerForm.querySelector('.ad-form__reset');
 
 const formTitleInput = document.querySelector('input[id="title"]');
 const formPriceInput = document.querySelector('input[id="price"]');
@@ -104,6 +107,32 @@ formRoomsSelect.addEventListener('change', () => {
 //   showSuccess.classList.add('hidden');
 // };
 
+const resultInFormat=(lat,lng)=>{
+  formAddressInput.value=`${lat},${lng}`;
+};
+
+const getCurrentAddress=(evt)=> {
+  const currentPoint =evt.target.getLatLng();
+  resultInFormat(currentPoint.lat.toFixed(5),currentPoint.lng.toFixed(5));
+};
+
+resultInFormat(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
+
+marker.on('moveend',getCurrentAddress);
+
+
+const returnToMainPosition=()=> {
+  marker.setLatLng(DEFAULT_MAIN_POSITION);
+  resultInFormat(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
+};
+
+
+resetButton.addEventListener('click', ()=> {
+  offerForm.reset();
+  returnToMainPosition();
+});
+
+
 const openModal=(obj) => {
   obj.classList.remove('hidden');
 };
@@ -130,6 +159,7 @@ const showSuccessfulSubmition = () => {
   document.body.appendChild(showSuccess);
   openModal(showSuccess);
   offerForm.reset();
+  returnToMainPosition();
   document.addEventListener('keydown',onSuccessModalEscKeydown);
   document.addEventListener('click',(evt) => {
     if (evt.target) {
