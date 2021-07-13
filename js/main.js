@@ -14,7 +14,7 @@ const OFFERS_QUANTITY = 4;
 getOffers(
   (resolve) => {
     console.log(resolve);
-    drawOnMap(resolve.slice(0,OFFERS_QUANTITY));
+    drawOnMap(resolve);
   },
   (reject) => {
     console.log(reject);

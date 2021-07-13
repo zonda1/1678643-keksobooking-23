@@ -1,5 +1,6 @@
 import {resetDisabled} from './utils.js';
 import {getSingleElement} from './draw-elements.js';
+import { getComfortRank} from './form.js';
 
 const mapFormFilters=document.querySelector('.map__filters');
 const mapFormFiltersSelect=mapFormFilters.children;
@@ -41,9 +42,21 @@ const marker=L.marker(
   },
 ).addTo(map);
 
+const compareOffer = (offerA, offerB) => {
+  const rankA = getComfortRank(offerA);
+  const rankB = getComfortRank(offerB);
+
+  return rankB - rankA;
+};
 
 const drawOnMap=(massive)=>{
-  massive.forEach(({location,offer,author}) => {
+  const newMassive=massive.map((element)=>{
+    element.rank=getComfortRank();
+  });
+  newMassive
+    .sort(compareOffer)
+    .slice(0,10)
+    .forEach(({location,offer,author}) => {
     const icon = L.icon({
       iconUrl: 'img/pin.svg',
       iconSize: [40, 40],

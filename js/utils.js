@@ -48,6 +48,10 @@ const isEscEvent = (evt) => {
   return evt.key === 'Escape' || evt.key === 'Esc';
 };
 
+const isEnterEvent = (evt) => {
+  return evt.key === 'Enter';
+};
+
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = 100;
@@ -69,4 +73,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {getRandomIntNumber,getRandomFracNumber,getRandomElement,getDeclension,resetDisabled,isEscEvent,showAlert};
+export {getRandomIntNumber,getRandomFracNumber,getRandomElement,getDeclension,resetDisabled,isEscEvent,showAlert,isEnterEvent};
