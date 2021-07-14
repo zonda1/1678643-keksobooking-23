@@ -107,6 +107,15 @@ formRoomsSelect.addEventListener('change', () => {
   }
 });
 
+// Главный метод фильтрации
+
+const getArrayFiltered=()=> {
+  if (selectHouseType.value)
+
+};
+
+
+
 // Конец блока с валидацией
 
 // Начало блока с фильтрацией
