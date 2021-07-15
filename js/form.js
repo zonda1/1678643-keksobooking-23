@@ -1,4 +1,4 @@
-import {getDeclension,resetDisabled,isEscEvent,isEnterEvent} from './utils.js';
+import {getDeclension,resetDisabled,isEscEvent} from './utils.js';
 import {sendOffer} from './fetch.js';
 import {DEFAULT_MAIN_POSITION, marker} from './map.js';
 const SYMBOLS_DICT={
@@ -36,27 +36,22 @@ const oneGuestsSelect = formGuestsSelect.querySelector(':nth-child(3)');
 const noGuestsSelect = formGuestsSelect.querySelector(':nth-child(4)');
 
 // Переменная для формы фильтрации
-const mapFilters=document.querySelector('.map__filters');
-// Переменные для дочерних элементов типа жилья
-const selectHouseType=mapFilters.querySelector('select[id="housing-type"]');
-
-// Переменные для дочерних элементов стоимости жилья
-const selectHousingPrice=mapFilters.querySelector('select[id="housing-price"]');
+// const mapFilters=document.querySelector('.map__filters');
 
 /*Переменные хранящие элементы удобств для фильтрации из DOM*/
 
-const selectWifiFeature=mapFilters.querySelector('.map__feature--wifi');
-const inputWifiFeature=mapFilters.querySelector('[id="filter-wifi"]');
-const selectDishwasherFeature=mapFilters.querySelector('.map__feature--dishwasher');
-const inputDishwasherFeature=mapFilters.querySelector('[id="filter-dishwasher"]');
-const selectParkingFeature=mapFilters.querySelector('.map__feature--parking');
-const inputParkingFeature=mapFilters.querySelector('[id="filter-parking"]');
-const selectWasherFeature=mapFilters.querySelector('.map__feature--washer');
-const inputWasherFeature=mapFilters.querySelector('[id="filter-washer"]');
-const selectElevatorFeature=mapFilters.querySelector('.map__feature--elevator');
-const inputElevatorFeature=mapFilters.querySelector('[id="filter-elevator"]');
-const selectConditionerFeature=mapFilters.querySelector('.map__feature--conditioner');
-const inputConditionerFeature=mapFilters.querySelector('[id="filter-conditioner"]');
+// const selectWifiFeature=mapFilters.querySelector('.map__feature--wifi');
+// const inputWifiFeature=mapFilters.querySelector('[id="filter-wifi"]');
+// const selectDishwasherFeature=mapFilters.querySelector('.map__feature--dishwasher');
+// const inputDishwasherFeature=mapFilters.querySelector('[id="filter-dishwasher"]');
+// const selectParkingFeature=mapFilters.querySelector('.map__feature--parking');
+// const inputParkingFeature=mapFilters.querySelector('[id="filter-parking"]');
+// const selectWasherFeature=mapFilters.querySelector('.map__feature--washer');
+// const inputWasherFeature=mapFilters.querySelector('[id="filter-washer"]');
+// const selectElevatorFeature=mapFilters.querySelector('.map__feature--elevator');
+// const inputElevatorFeature=mapFilters.querySelector('[id="filter-elevator"]');
+// const selectConditionerFeature=mapFilters.querySelector('.map__feature--conditioner');
+// const inputConditionerFeature=mapFilters.querySelector('[id="filter-conditioner"]');
 
 //  Начало блока с валидацией
 
@@ -107,41 +102,7 @@ formRoomsSelect.addEventListener('change', () => {
   }
 });
 
-// Главный метод фильтрации
-
-const getArrayFiltered=()=> {
-  if (selectHouseType.value)
-
-};
-
-
-
 // Конец блока с валидацией
-
-// Начало блока с фильтрацией
-
-
-const getComfortRank = ({offer}) => {
-  let rank = 0;
-  selectHouseType.childNodes.forEach((element)=>{
-    if (offer.type===element.value) {
-      rank += 2;
-    }
-  });
-  // if ((offers.features.indexOf('wi-fi') ===-1 ) && (inputWifiFeature.hasAttribute('selected'))) {
-  //   rank += 1;
-  // }
-
-  console.log(rank);
-  return rank;
-};
-
-mapFilters.addEventListener('keydown',(evt) => {
-  if (isEnterEvent(evt)) {
-    evt.preventDefault();
-    alert('Фильтрация применилась');
-  }
-});
 
 
 // const getTotalRank =() => {
@@ -281,4 +242,4 @@ const submitUserForm =(onSuccess,onFail)=>{
   });
 };
 
-export {showSuccessfulSubmition,showUnsuccessfulSubmition,submitUserForm,getComfortRank};
+export {showSuccessfulSubmition,showUnsuccessfulSubmition,submitUserForm};

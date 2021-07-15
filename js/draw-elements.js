@@ -34,31 +34,6 @@ const getSingleElement = ({
   return offerElement;
 };
 
-// const getComfortRank = ({offer}) => {
-//   let rank = 0;
-//   if (offer.features.indexOf('wi-fi') !==-1 ) {
-//     rank += 1;
-//   }
-//   if (inputDishwasherFeature.hasAttribute('selected')) {
-//     rank += 1;
-//   }
-//   if (inputParkingFeature.hasAttribute('selected')) {
-//     rank += 1;
-//   }
-//   if (inputWasherFeature.hasAttribute('selected')) {
-//     rank += 1;
-//   }
-//   if (inputElevatorFeature.hasAttribute('selected')) {
-//     rank += 1;
-//   }
-//   if (inputConditionerFeature.hasAttribute('selected')) {
-//     rank += 1;
-//   }
-//   console.log(rank);
-//   return rank;
-// };
-
-
 const drawElements = function (container, elements) {
   elements.forEach((item) => {
     container.appendChild(getSingleElement(item));

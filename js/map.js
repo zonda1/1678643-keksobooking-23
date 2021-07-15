@@ -1,6 +1,6 @@
 import {resetDisabled} from './utils.js';
 import {getSingleElement} from './draw-elements.js';
-import { getComfortRank} from './form.js';
+
 
 const mapFormFilters=document.querySelector('.map__filters');
 const mapFormFiltersSelect=mapFormFilters.children;
@@ -12,6 +12,17 @@ const DEFAULT_MAIN_POSITION = {
   lng:139.83947,
 };
 
+const enableFilter = () => {
+  mapFormFilters.classList.remove('map__filters--disabled');
+  resetDisabled(mapFormFiltersSelect);
+};
+
+const enableForm = () => {
+  offerAddForm.classList.remove('ad-form--disabled');
+  resetDisabled(offerAddFormElement);
+};
+
+
 const map=L.map('map-canvas')
   .setView(
     DEFAULT_MAIN_POSITION,
@@ -21,10 +32,8 @@ L.tileLayer(
   {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
 )
   .on('load', ()=>{
-    mapFormFilters.classList.remove('map__filters--disabled');
-    resetDisabled(mapFormFiltersSelect);
-    offerAddForm.classList.remove('ad-form--disabled');
-    resetDisabled(offerAddFormElement);
+    // enableFilter();
+    // enableForm();
   })
   .addTo(map);
 
@@ -42,36 +51,24 @@ const marker=L.marker(
   },
 ).addTo(map);
 
-const compareOffer = (offerA, offerB) => {
-  const rankA = getComfortRank(offerA);
-  const rankB = getComfortRank(offerB);
-
-  return rankB - rankA;
-};
-
 const drawOnMap=(massive)=>{
-  const newMassive=massive.map((element)=>{
-    element.rank=getComfortRank();
-  });
-  newMassive
-    .sort(compareOffer)
-    .slice(0,10)
+  massive
     .forEach(({location,offer,author}) => {
-    const icon = L.icon({
-      iconUrl: 'img/pin.svg',
-      iconSize: [40, 40],
-      iconAnchor: [20, 40],
+      const icon = L.icon({
+        iconUrl: 'img/pin.svg',
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+      });
+      const points = L.marker(
+        location,
+        {
+          icon,
+        },
+      );
+      points
+        .addTo(map)
+        .bindPopup(getSingleElement({offer,author}));
     });
-    const points = L.marker(
-      location,
-      {
-        icon,
-      },
-    );
-    points
-      .addTo(map)
-      .bindPopup(getSingleElement({offer,author}));
-  });
 };
 
-export {drawOnMap,DEFAULT_MAIN_POSITION,marker};
+export {drawOnMap,DEFAULT_MAIN_POSITION,marker,enableFilter,enableForm};
