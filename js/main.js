@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import { showAlert } from './utils.js';
 // import {createObject} from './create-data.js';
-import {showSuccessfulSubmition,showUnsuccessfulSubmition,submitUserForm} from './form.js';
-import {drawOnMap,enableForm} from './map.js';
+import {enableForm,showSuccessfulSubmition,showUnsuccessfulSubmition,submitUserForm,resetButton} from './form.js';
+import {drawOnMap,initMap} from './map.js';
 import {getOffers} from './fetch.js';
-import {activateFilter} from './filter.js';
+import {mapFilters,activateFilter,getFilteredAdArray} from './filter.js';
 // import {changeFilter} from './filter.js';
 
 const MAX_OFFERS_QUANTITY = 10;
@@ -18,11 +18,18 @@ let offers=[];
 getOffers(
   (resolve) => {
     console.log(resolve);
+    console.log(resolve.filter((item) => !Array.isArray(item.offer.features)));
     offers=resolve;
-    drawOnMap(offers);
     activateFilter(offers);
+    initMap();
+    drawOnMap(getFilteredAdArray().slice(0, MAX_OFFERS_QUANTITY));
     enableForm();
-    // changeFilter(offers);
+    resetButton.addEventListener('click', ()=> {
+      drawOnMap(getFilteredAdArray().slice(0, MAX_OFFERS_QUANTITY));
+    });
+    mapFilters.addEventListener('change', () => {
+      drawOnMap(getFilteredAdArray().slice(0, MAX_OFFERS_QUANTITY));
+    });
   },
   (reject) => {
     console.log(reject);
@@ -30,5 +37,3 @@ getOffers(
   });
 
 submitUserForm(showSuccessfulSubmition,showUnsuccessfulSubmition);
-
-// drawOnMap(offersNearby);
