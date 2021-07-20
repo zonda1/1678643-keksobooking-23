@@ -22,8 +22,7 @@ getOffers(
       drawOnMap(getFilteredAdArray());
     },RERENDER_DELAY));
   },
-  (reject) => {
-    console.log(reject);
+  () => {
     showAlert('Не удалось загрузить данные с сервера');
   });
 
