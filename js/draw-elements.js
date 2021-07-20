@@ -16,16 +16,6 @@ const GUESTS_DICT={
 
 const cardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-// const createImgElement=(massive,temp)=>{
-//   massive.forEach((element)=> {
-//   const img=temp.createElement('img');
-//   img.width = '45';
-//   img.height = '40';
-//   img.src = element;
-//   temp.querySelector('.popup__photos').appendChild(img);
-// });
-// };
-
 const getSingleElement = ({
   offer,
   author,

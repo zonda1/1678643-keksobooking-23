@@ -2,6 +2,7 @@ import {resetDisabled} from './utils.js';
 
 const MIN_PRICE=10000;
 const MAX_PRICE=50000;
+const MAX_OFFERS_QUANTITY = 10;
 
 const mapFilters=document.querySelector('.map__filters');
 const mapFiltersSelect=mapFilters.children;
@@ -30,8 +31,8 @@ const compareFeatures = (filterFeatures, offerFeatures) => {
   if (!Array.isArray(filterFeatures)) {
     return true;
   }
-  for (let i=0; i < filterFeatures.length; i++) {
-    if (offerFeatures.indexOf(filterFeatures[i]) === -1) {
+  for (let ind=0; ind < filterFeatures.length; ind++) {
+    if (offerFeatures.indexOf(filterFeatures[ind]) === -1) {
       return false;
     }
   }
@@ -41,8 +42,8 @@ const compareFeatures = (filterFeatures, offerFeatures) => {
 const getFilteredAdArray = () => {
   const result=[];
   let currentAd;
-  for (let i=0; i < ads.length; i++) {
-    currentAd=ads[i];
+  for (let ind=0; ind < ads.length; ind++) {
+    currentAd=ads[ind];
     if (selectHouseType.value !== 'any' && currentAd.offer.type !== selectHouseType.value ) {
       continue;
     }
@@ -60,8 +61,7 @@ const getFilteredAdArray = () => {
     }
     result.push(currentAd);
   }
-  console.log(result);
-  return result;
+  return result.slice(0, MAX_OFFERS_QUANTITY);
 };
 
 const activateFilter = (array) => {

@@ -1,9 +1,6 @@
 
 import {getSingleElement} from './draw-elements.js';
 
-
-// const mapFormFilters=document.querySelector('.map__filters');
-
 let map, layerGroup;
 
 const DEFAULT_MAIN_POSITION = {
