@@ -28,8 +28,8 @@ const transformPriceInFilter=(price)=> {
 const createArrayWithFeaturesChecked = () => Array.from(mapFilters.querySelectorAll(checkedFeatures)).map((checkbox) => checkbox.value);
 
 const compareFeatures = (filterFeatures, offerFeatures) => {
-  if (!Array.isArray(filterFeatures)) {
-    return true;
+  if (!Array.isArray(offerFeatures)) {
+    return false;
   }
   for (let ind=0; ind < filterFeatures.length; ind++) {
     if (offerFeatures.indexOf(filterFeatures[ind]) === -1) {
