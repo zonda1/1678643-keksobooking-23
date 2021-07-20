@@ -1,7 +1,7 @@
 import {getDeclension,resetDisabled,isEscEvent} from './utils.js';
 import {sendOffer} from './fetch.js';
-import {DEFAULT_MAIN_POSITION, marker} from './map.js';
-import { mapFilters} from './filter.js';
+import {DEFAULT_MAIN_POSITION, marker,drawOnMap} from './map.js';
+import { mapFilters,getFilteredAdArray} from './filter.js';
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -200,12 +200,6 @@ const checkLeavingTimeValidity=()=> {
 
 // Конец блока с валидацией
 
-const enableForm = () => {
-  offerForm.classList.remove('ad-form--disabled');
-  resetDisabled(offerAddFormElement);
-};
-
-
 const formatAddressInput=(lat,lng)=>{
   formAddressInput.value=`${lat},${lng}`;
 };
@@ -221,13 +215,19 @@ marker.on('moveend',getCurrentAddress);
 
 
 const resetForms = ()=> {
+  drawOnMap(getFilteredAdArray());
   offerForm.reset();
   mapFilters.reset();
   marker.setLatLng(DEFAULT_MAIN_POSITION);
   formatAddressInput(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
 };
 
-resetButton.addEventListener('click', ()=> resetForms);
+const enableForm = () => {
+  offerForm.classList.remove('ad-form--disabled');
+  resetDisabled(offerAddFormElement);
+  resetButton.addEventListener('click', resetForms);
+};
+
 
 const onSuccessModalClose = (evt) => {
   evt.preventDefault();

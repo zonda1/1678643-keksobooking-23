@@ -56,7 +56,7 @@ const getFilteredAdArray = () => {
     else if (selectHouseGuests.value !== 'any' && currentAd.offer.guests !== Number(selectHouseGuests.value) ) {
       continue;
     }
-    else if (mapFilters.querySelectorAll(checkedFeatures).length !==0 && !compareFeatures(currentAd.offer.features,createArrayWithFeaturesChecked())) {
+    else if (mapFilters.querySelectorAll(checkedFeatures).length !==0 && !compareFeatures(createArrayWithFeaturesChecked(),currentAd.offer.features)) {
       continue;
     }
     result.push(currentAd);
