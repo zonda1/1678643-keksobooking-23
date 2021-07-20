@@ -1,6 +1,13 @@
 /* eslint-disable prefer-template */
 import {getDeclension} from './utils.js';
-import {typeCaption} from './create-data.js';
+
+const typeCaption={
+  'palace':'Дворец',
+  'flat':'Квартира',
+  'house':'Дом',
+  'bungalow':'Бунгало',
+  'hotel':'Отель',
+};
 
 const ROOMS_DICT={
   one: 'комната',
