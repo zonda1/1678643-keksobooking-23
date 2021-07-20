@@ -7,7 +7,10 @@ const getDeclension = function (num,obj) {
   if (num % 10===1 && num % 100!==11) {
     return obj.one;
   }
-  if (num % 10>=2 && num % 10 <= 4) {
+  if (num % 10>=2 && num % 100 < 4) {
+    return obj.several;
+  }
+  if (num===4) {
     return obj.several;
   }
   return obj.many;

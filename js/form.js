@@ -215,11 +215,12 @@ marker.on('moveend',getCurrentAddress);
 
 
 const resetForms = ()=> {
-  drawOnMap(getFilteredAdArray());
   offerForm.reset();
   mapFilters.reset();
+  drawOnMap(getFilteredAdArray());
   marker.setLatLng(DEFAULT_MAIN_POSITION);
   formatAddressInput(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
+  returnPlaceholder();
 };
 
 const enableForm = () => {
