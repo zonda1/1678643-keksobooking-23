@@ -1,20 +1,26 @@
 /* eslint-disable no-console */
-import { showAlert } from './utils.js';
-// import {createObject} from './create-data.js';
-import {showSuccessfulSubmition,showUnsuccessfulSubmition,submitUserForm} from './form.js';
-import {drawOnMap} from './map.js';
-import {getOffers} from './fetch.js';
 
-const OFFERS_QUANTITY = 4;
-// const offersNearby = new Array(OFFERS_QUANTITY).fill(null).map(() => createObject());
-// const mapCanvas = document.querySelector('.map__canvas');
-// console.log(offersNearby);
-// drawElements(mapCanvas, offersNearby);
+import { showAlert } from './utils.js';
+import {enableForm,showSuccessfulSubmition,showUnsuccessfulSubmition,submitUserForm} from './form.js';
+import {drawOnMap,initMap} from './map.js';
+import {getOffers} from './fetch.js';
+import {mapFilters,activateFilter,getFilteredAdArray} from './filter.js';
+import {debounce} from './utils/debounce.js';
+
+const RERENDER_DELAY = 500;
+
+let offers=[];
 
 getOffers(
   (resolve) => {
-    console.log(resolve);
-    drawOnMap(resolve.slice(0,OFFERS_QUANTITY));
+    offers=resolve;
+    activateFilter(offers);
+    initMap();
+    drawOnMap(getFilteredAdArray());
+    enableForm();
+    mapFilters.addEventListener('change',debounce(() => {
+      drawOnMap(getFilteredAdArray());
+    },RERENDER_DELAY));
   },
   (reject) => {
     console.log(reject);
@@ -22,5 +28,3 @@ getOffers(
   });
 
 submitUserForm(showSuccessfulSubmition,showUnsuccessfulSubmition);
-
-// drawOnMap(offersNearby);

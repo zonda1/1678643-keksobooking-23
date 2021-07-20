@@ -1,20 +1,37 @@
 import {getDeclension,resetDisabled,isEscEvent} from './utils.js';
 import {sendOffer} from './fetch.js';
-import {DEFAULT_MAIN_POSITION, marker} from './map.js';
+import {DEFAULT_MAIN_POSITION, marker,drawOnMap} from './map.js';
+import { mapFilters,getFilteredAdArray} from './filter.js';
+
+const MIN_TITLE_LENGTH = 30;
+const MAX_TITLE_LENGTH = 100;
+const MAX_PRICE_VALUE = 1000000;
+
 const SYMBOLS_DICT={
   one: 'символ',
   several:'символа',
   many:'символов',
 };
 
-// const GUESTS_TO_ROOMS = {
-//   '1': [1],
-//   '2': [1, 2],
-//   '3': [1, 2, 3],
-//   '100': [0],
-// };
+const PRICE_DEPEND_ON_TYPE={
+  'bungalow': 0,
+  'flat': 1000,
+  'hotel': 3000,
+  'house': 5000,
+  'palace': 10000,
+};
+
+const GUESTS_TO_ROOMS = {
+  '1': [1],
+  '2': [1, 2],
+  '3': [1, 2, 3],
+  '100': [0],
+};
+
 
 const offerForm=document.querySelector('.ad-form');
+const offerAddFormElement=offerForm.querySelectorAll('.ad-form__element');
+
 const sendWithSuccess=document.querySelector('#success').content.querySelector('.success');
 const showSuccess=sendWithSuccess.cloneNode(true);
 
@@ -22,175 +39,261 @@ const sendWithError=document.querySelector('#error').content.querySelector('.err
 const showError=sendWithError.cloneNode(true);
 const closeMessageWithError=showError.querySelector('.error__button');
 
-const formAddressInput=offerForm.querySelector('input[id="address"]');
+const formAddressInput=offerForm.querySelector('input[name="address"]');
 const resetButton=offerForm.querySelector('.ad-form__reset');
 
-const formTitleInput = document.querySelector('input[id="title"]');
-const formPriceInput = document.querySelector('input[id="price"]');
-const formRoomsSelect = document.querySelector('select[id="room_number"]');
-const formGuestsSelect = document.querySelector('select[id="capacity"]');
+const formTitleInput = document.querySelector('input[name="title"]');
+const formPriceInput = document.querySelector('input[name="price"]');
+const formRoomsSelect = document.querySelector('select[name="rooms"]');
+const formRoomsOptions=formRoomsSelect.children;
+const formGuestsSelect = document.querySelector('select[name="capacity"]');
 const formGuestsOptions=formGuestsSelect.children;
-const threeGuestsSelect = formGuestsSelect.querySelector(':first-child');
-const twoGuestsSelect = formGuestsSelect.querySelector(':nth-child(2)');
-const oneGuestsSelect = formGuestsSelect.querySelector(':nth-child(3)');
-const noGuestsSelect = formGuestsSelect.querySelector(':nth-child(4)');
 
-const MIN_TITLE_LENGTH = 30;
-const MAX_TITLE_LENGTH = 100;
-const MAX_PRICE_VALUE = 1000000;
+const formTypeSelect=offerForm.querySelector('select[name="type"]');
 
-formTitleInput.addEventListener('input', () => {
+
+const formArrivalTimeSelect=offerForm.querySelector('select[name="timein"]');
+const formArrivalTimeOptions=formArrivalTimeSelect.children;
+const timeInMassive=Array.from(formArrivalTimeOptions).map((option)=>option.value);
+
+const formLeavingTimeSelect=offerForm.querySelector('select[name="timeout"]');
+const formLeavingTimeOptions=formLeavingTimeSelect.children;
+const timeOutMassive=Array.from(formLeavingTimeOptions).map((option)=>option.value);
+
+// Начало функций соответствия для селектов
+
+const disableWrongGuests=() => {
+  for (let ind=0; ind<formGuestsOptions.length; ind++) {
+    const rooms=formRoomsSelect.value;
+    const mas=GUESTS_TO_ROOMS[rooms];
+    formGuestsOptions[ind].removeAttribute('disabled', 'disabled');
+    if (mas.indexOf(Number(formGuestsOptions[ind].value)) === -1) {
+      formGuestsOptions[ind].setAttribute('disabled', 'disabled');
+    } else {
+      formGuestsSelect.value=mas[0];
+    }
+  }
+};
+
+formRoomsSelect.addEventListener('change', disableWrongGuests);
+
+const returnPlaceholder = () => {
+  const type=formTypeSelect.value;
+  for (const key in PRICE_DEPEND_ON_TYPE) {
+    if (type===key) {
+      formPriceInput.placeholder=PRICE_DEPEND_ON_TYPE[type];
+    }
+  }
+};
+
+formTypeSelect.addEventListener('change',returnPlaceholder);
+
+const returnLeavingTime=()=> {
+  Array.from(formLeavingTimeOptions).forEach((option)=> {
+    const timein=formArrivalTimeSelect.value;
+    option.removeAttribute('disabled', 'disabled');
+    if (timein.indexOf(option.value) === -1) {
+      option.setAttribute('disabled', 'disabled');
+    } else {
+      formLeavingTimeSelect.value=timein;
+    }
+  });
+};
+
+formArrivalTimeSelect.addEventListener('change',returnLeavingTime);
+
+// Конец функций соответствия для селектов
+
+// Начало блока с валидацией
+
+const checkTitleValidity= ()=> {
   const valueLength = formTitleInput.value.length;
+  let isCorrect=false;
   if (valueLength < MIN_TITLE_LENGTH) {
     const symbolsRemain=MIN_TITLE_LENGTH-valueLength;
     formTitleInput.setCustomValidity(`Нужно ввести еще ${symbolsRemain} ${getDeclension(symbolsRemain,SYMBOLS_DICT)}`);
   } else if (valueLength > MAX_TITLE_LENGTH) {
     formTitleInput.setCustomValidity('Имя не должно превышать 100-а символов');
   } else {
+    isCorrect=true;
     formTitleInput.setCustomValidity('');
   }
   formTitleInput.reportValidity();
-});
+  return isCorrect;
+};
 
-formPriceInput.addEventListener('input', () => {
+formTitleInput.addEventListener('input', checkTitleValidity);
+
+const checkPriceValidity= ()=> {
+  const price=Number(formPriceInput.placeholder);
+  let isCorrect=false;
   if (formPriceInput.value > MAX_PRICE_VALUE) {
     formPriceInput.setCustomValidity('Значение не должно превышать 1000000');
   } else if (formPriceInput.value < 0) {
     formPriceInput.setCustomValidity('Значение не должно быть отрицательным');
+  } else if (formPriceInput.value < price && formPriceInput.value >= 0) {
+    formPriceInput.setCustomValidity(`Значение не должно быть меньше ${price}`);
   } else {
+    isCorrect=true;
     formPriceInput.setCustomValidity('');
   }
   formPriceInput.reportValidity();
-});
+  return isCorrect;
+};
 
 
-formRoomsSelect.addEventListener('change', () => {
-  resetDisabled(formGuestsOptions);
-  if (formRoomsSelect.value==='1') {
-    threeGuestsSelect.setAttribute('disabled', 'disabled');
-    twoGuestsSelect.setAttribute('disabled', 'disabled');
-    noGuestsSelect.setAttribute('disabled', 'disabled');
-  } else if (formRoomsSelect.value==='2') {
-    threeGuestsSelect.setAttribute('disabled', 'disabled');
-    noGuestsSelect.setAttribute('disabled', 'disabled');
-  } else if (formRoomsSelect.value==='3') {
-    noGuestsSelect.setAttribute('disabled', 'disabled');
-  } else if (formRoomsSelect.value==='100') {
-    threeGuestsSelect.setAttribute('disabled', 'disabled');
-    twoGuestsSelect.setAttribute('disabled', 'disabled');
-    oneGuestsSelect.setAttribute('disabled', 'disabled');
+formPriceInput.addEventListener('input', checkPriceValidity);
+
+const checkRoomsValidity=()=> {
+  let isCorrect=false;
+  for (let ind=0; ind<formRoomsOptions.length; ind++) {
+    const rooms=formRoomsSelect.value;
+    if (rooms === formRoomsOptions[ind].value) {
+      isCorrect=true;
+      return isCorrect;
+    }
   }
-});
+  return isCorrect;
+};
 
-// const setDisabled=(obj)=> {
-//   for (let i=0;i<obj.length;i++) {
-//     obj[i].setAttribute('disabled','disabled');
-//   }
-// };
+const checkGuestsValidity=()=> {
+  let isCorrect=false;
+  for (let ind=0; ind<formGuestsOptions.length; ind++) {
+    const guests=formGuestsSelect.value;
+    if (guests ===formGuestsOptions[ind].value) {
+      isCorrect=true;
+      return isCorrect;
+    }
+  }
+  return isCorrect;
+};
 
-// formRoomsSelect.addEventListener('change', () => {
-//   const roomQuantity=formRoomsSelect.value;
-//   console.log(roomQuantity);
-//   // setDisabled(formGuestsOptions);
-// });
+
+const checkArrivalTimeValidity=()=> {
+  let isCorrect=false;
+  timeInMassive.forEach((element)=> {
+    const timein=formArrivalTimeSelect.value;
+    if (timein===element) {
+      isCorrect=true;
+      formArrivalTimeSelect.setCustomValidity('');
+      return isCorrect;
+    }
+  });
+  formArrivalTimeSelect.setCustomValidity('Неправильно выбрано время заезда');
+  return isCorrect;
+};
+
+const checkLeavingTimeValidity=()=> {
+  let isCorrect=false;
+  timeOutMassive.forEach((element)=> {
+    const timeout=formLeavingTimeSelect.value;
+    if (timeout===element) {
+      isCorrect=true;
+      formLeavingTimeSelect.setCustomValidity('');
+      return isCorrect;
+    }
+  });
+  formLeavingTimeSelect.setCustomValidity('Неправильно выбрано время выезда');
+  return isCorrect;
+};
 
 
-// formGuestsSelect.addEventListener('change', () => {
-// console.log(GUESTS_TO_ROOMS[0]);
-// });
+// Конец блока с валидацией
 
-// closeMessageWithError.addEventListener('click', () => {
-
-// });
-
-// const closeSuccessModal=() => {
-//   showSuccess.classList.add('hidden');
-// };
-
-const resultInFormat=(lat,lng)=>{
+const formatAddressInput=(lat,lng)=>{
   formAddressInput.value=`${lat},${lng}`;
 };
 
 const getCurrentAddress=(evt)=> {
   const currentPoint =evt.target.getLatLng();
-  resultInFormat(currentPoint.lat.toFixed(5),currentPoint.lng.toFixed(5));
+  formatAddressInput(currentPoint.lat.toFixed(5),currentPoint.lng.toFixed(5));
 };
 
-resultInFormat(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
+formatAddressInput(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
 
 marker.on('moveend',getCurrentAddress);
 
 
-const returnToMainPosition=()=> {
-  marker.setLatLng(DEFAULT_MAIN_POSITION);
-  resultInFormat(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
-};
-
-
-resetButton.addEventListener('click', ()=> {
+const resetForms = ()=> {
   offerForm.reset();
-  returnToMainPosition();
-});
-
-
-const openModal=(obj) => {
-  obj.classList.remove('hidden');
+  mapFilters.reset();
+  drawOnMap(getFilteredAdArray());
+  marker.setLatLng(DEFAULT_MAIN_POSITION);
+  formatAddressInput(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
+  returnPlaceholder();
 };
 
-const closeModal=(obj) => {
-  obj.classList.add('hidden');
+const enableForm = () => {
+  offerForm.classList.remove('ad-form--disabled');
+  resetDisabled(offerAddFormElement);
+  resetButton.addEventListener('click', resetForms);
 };
 
-const onSuccessModalEscKeydown = (evt) => {
-  if (isEscEvent(evt)) {
-    evt.preventDefault();
-    closeModal(showSuccess);
+
+const onSuccessModalClose = (evt) => {
+  evt.preventDefault();
+
+  if (isEscEvent(evt) || evt.target === showSuccess) {
+    showSuccess.classList.add('hidden');
+    document.removeEventListener('keydown',onSuccessModalClose);
+    document.removeEventListener('click',onSuccessModalClose);
   }
 };
 
-const onErrorModalEscKeydown = (evt) => {
-  if (isEscEvent(evt)) {
-    evt.preventDefault();
-    closeModal(showError);
+const showSuccessModal=() => {
+  document.body.appendChild(showSuccess);
+  showSuccess.classList.remove('hidden');
+  document.addEventListener('keydown',onSuccessModalClose);
+  document.addEventListener('click',onSuccessModalClose);
+};
+
+const onErrorModalClose = (evt) => {
+  evt.preventDefault();
+
+  if (isEscEvent(evt) || evt.target === showError || evt.target===closeMessageWithError ) {
+    showError.classList.add('hidden');
+    document.removeEventListener('keydown',onErrorModalClose);
+    document.removeEventListener('click',onErrorModalClose);
+    closeMessageWithError.removeEventListener('click', onErrorModalClose);
   }
+};
+
+const showErrorModal = () => {
+  document.body.appendChild(showError);
+  showError.classList.remove('hidden');
+  document.addEventListener('keydown',onErrorModalClose);
+  document.addEventListener('click',onErrorModalClose);
+  closeMessageWithError.addEventListener('click', onErrorModalClose);
 };
 
 const showSuccessfulSubmition = () => {
-  document.body.appendChild(showSuccess);
-  openModal(showSuccess);
-  offerForm.reset();
-  returnToMainPosition();
-  document.addEventListener('keydown',onSuccessModalEscKeydown);
-  document.addEventListener('click',(evt) => {
-    if (evt.target) {
-      closeModal(showSuccess);
-    }
-  });
+  showSuccessModal();
+  resetForms();
 };
 
 const showUnsuccessfulSubmition = () => {
-  document.body.appendChild(showError);
-  openModal(showError);
-  closeMessageWithError.addEventListener('click', () => {
-    closeModal(showError);
-  });
-  document.addEventListener('keydown',onErrorModalEscKeydown);
-  document.addEventListener('click',(evt) => {
-    if (evt.target) {
-      closeModal(showError);
-    }
-  });
+  showErrorModal();
 };
+
+function checkAllFormValidity () {
+  let isCorrect=true;
+  if (!checkTitleValidity() || !checkPriceValidity() || !checkRoomsValidity() || !checkGuestsValidity() || !checkArrivalTimeValidity() || !checkLeavingTimeValidity()) {
+    isCorrect=false;
+  }
+  return isCorrect;
+}
 
 const submitUserForm =(onSuccess,onFail)=>{
   offerForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    sendOffer(
-      ()=>onSuccess(),
-      ()=>onFail(),
-      new FormData(evt.target),
-    );
+    if (checkAllFormValidity()) {
+      sendOffer(
+        ()=>onSuccess(),
+        ()=>onFail(),
+        new FormData(evt.target),
+      );
+    }
   });
 };
 
-export {showSuccessfulSubmition,showUnsuccessfulSubmition,submitUserForm};
+export {enableForm,showSuccessfulSubmition,showUnsuccessfulSubmition,submitUserForm,resetButton,resetForms};
