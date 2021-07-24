@@ -2,10 +2,14 @@ import {getDeclension,resetDisabled,isEscEvent} from './utils.js';
 import {sendOffer} from './fetch.js';
 import {DEFAULT_MAIN_POSITION, marker,drawOnMap} from './map.js';
 import { mapFilters,getFilteredAdArray} from './filter.js';
+import {offerPhotoContainer, previewAvatar } from './preview.js';
+
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE_VALUE = 1000000;
+
+const DEFAULT_AVATAR='img/muffin-grey.svg';
 
 const SYMBOLS_DICT={
   one: 'символ',
@@ -214,13 +218,18 @@ formatAddressInput(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
 marker.on('moveend',getCurrentAddress);
 
 
-const resetForms = ()=> {
+const resetForms = (evt)=> {
+  evt.preventDefault();
   offerForm.reset();
   mapFilters.reset();
   drawOnMap(getFilteredAdArray());
   marker.setLatLng(DEFAULT_MAIN_POSITION);
   formatAddressInput(DEFAULT_MAIN_POSITION.lat,DEFAULT_MAIN_POSITION.lng);
   returnPlaceholder();
+  previewAvatar.src=DEFAULT_AVATAR;
+  while (offerPhotoContainer.firstChild) {
+    offerPhotoContainer.removeChild(offerPhotoContainer.firstChild);
+  }
 };
 
 const enableForm = () => {

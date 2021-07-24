@@ -1,5 +1,3 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable id-length */
 const ALERT_SHOW_TIME = 5000;
 
 const getDeclension = function (num,obj) {
@@ -17,22 +15,21 @@ const getDeclension = function (num,obj) {
 };
 
 const resetDisabled=(obj)=> {
-  for (let i=0;i<obj.length;i++) {
-    obj[i].removeAttribute('disabled');
+  for (let ind=0; ind < obj.length; ind++) {
+    obj[ind].removeAttribute('disabled');
   }
 };
 
-const isEscEvent = (evt) => {
-  return evt.key === 'Escape' || evt.key === 'Esc';
-};
+const isEscEvent = (evt) => evt.key === 'Escape' || evt.key === 'Esc';
+
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
+  alertContainer.style.zIndex = '100';
   alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
-  alertContainer.style.top = 0;
-  alertContainer.style.right = 0;
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
   alertContainer.style.padding = '10px 3px';
   alertContainer.style.fontSize = '30px';
   alertContainer.style.textAlign = 'center';
