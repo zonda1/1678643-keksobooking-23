@@ -1,5 +1,7 @@
-/* eslint-disable prefer-template */
 import {getDeclension} from './utils.js';
+
+const OFFER_IMG_WIDTH=45;
+const OFFER_IMG_HEIGHT=40;
 
 const typeCaption={
   'palace':'Дворец',
@@ -55,8 +57,8 @@ const getSingleElement = ({
     offer.photos.forEach((photo)=> {
       const imgElement=document.createElement('img');
       imgElement.classList.add('popup__photo');
-      imgElement.width = '45';
-      imgElement.height = '40';
+      imgElement.width = OFFER_IMG_WIDTH;
+      imgElement.height = OFFER_IMG_HEIGHT;
       imgElement.src = photo;
       photosList.appendChild(imgElement);
     });
