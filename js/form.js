@@ -55,14 +55,10 @@ const formGuestsOptions=formGuestsSelect.children;
 
 const formTypeSelect=offerForm.querySelector('select[name="type"]');
 
-
 const formArrivalTimeSelect=offerForm.querySelector('select[name="timein"]');
-const formArrivalTimeOptions=formArrivalTimeSelect.children;
-const timeInMassive=Array.from(formArrivalTimeOptions).map((option)=>option.value);
 
 const formLeavingTimeSelect=offerForm.querySelector('select[name="timeout"]');
 const formLeavingTimeOptions=formLeavingTimeSelect.children;
-const timeOutMassive=Array.from(formLeavingTimeOptions).map((option)=>option.value);
 
 // Начало функций соответствия для селектов
 
@@ -172,36 +168,6 @@ const checkGuestsValidity=()=> {
   return isCorrect;
 };
 
-
-const checkArrivalTimeValidity=()=> {
-  let isCorrect=false;
-  timeInMassive.forEach((element)=> {
-    const timein=formArrivalTimeSelect.value;
-    if (timein===element) {
-      isCorrect=true;
-      formArrivalTimeSelect.setCustomValidity('');
-      return isCorrect;
-    }
-  });
-  formArrivalTimeSelect.setCustomValidity('Неправильно выбрано время заезда');
-  return isCorrect;
-};
-
-const checkLeavingTimeValidity=()=> {
-  let isCorrect=false;
-  timeOutMassive.forEach((element)=> {
-    const timeout=formLeavingTimeSelect.value;
-    if (timeout===element) {
-      isCorrect=true;
-      formLeavingTimeSelect.setCustomValidity('');
-      return isCorrect;
-    }
-  });
-  formLeavingTimeSelect.setCustomValidity('Неправильно выбрано время выезда');
-  return isCorrect;
-};
-
-
 // Конец блока с валидацией
 
 const formatAddressInput=(lat,lng)=>{
@@ -219,7 +185,9 @@ marker.on('moveend',getCurrentAddress);
 
 
 const resetForms = (evt)=> {
-  evt.preventDefault();
+  if (evt) {
+    evt.preventDefault();
+  }
   offerForm.reset();
   mapFilters.reset();
   drawOnMap(getFilteredAdArray());
@@ -286,7 +254,7 @@ const showUnsuccessfulSubmition = () => {
 
 function checkAllFormValidity () {
   let isCorrect=true;
-  if (!checkTitleValidity() || !checkPriceValidity() || !checkRoomsValidity() || !checkGuestsValidity() || !checkArrivalTimeValidity() || !checkLeavingTimeValidity()) {
+  if (!checkTitleValidity() || !checkPriceValidity() || !checkRoomsValidity() || !checkGuestsValidity()) {
     isCorrect=false;
   }
   return isCorrect;
